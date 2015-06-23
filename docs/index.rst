@@ -104,4 +104,3 @@ Please feel free to contact us any time if you have any questions or comments.
  `Carla CARRUBBA <mailto:carla.carrubba@ct.infn.it>`_ - Italian National Institute of Nuclear Physics (INFN_)
  
 
-:Date: June 15th, 2015 16:50
