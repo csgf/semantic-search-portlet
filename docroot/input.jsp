@@ -94,6 +94,90 @@
 
 
         </style>
+
+        <script>
+         
+            //         
+            //         $(function() { 
+            //             
+            //             
+            //         var term;
+            //         term=document.getElementById("id_search_word").value;    
+            //         alert("s "+term);
+            //       $("#id_search_word").autocomplete(  
+            //       {  
+            //           
+            //           
+            //           source : function(request, response) {  
+            //               $.ajax({  
+            //                   url : "http://localhost:8080/virtuoso/api/simpleResources?keyword="+term+"&limit=10&offset=0",  
+            //                   dataType : "json",  
+            //                   data : {  
+            //                       agencyName : request.term  
+            //                   },  
+            //                   success : function(data) {  
+            //                   
+            //                       response($.map(data.simpleResourceVirtuoso, function(titles) {    //ITEM HERE IS UNDEFINED!!!!!
+            //                         
+            //                           return {  
+            //                                  
+            //                               label: titles.label,  
+            //                               value: titles.value  
+            //                           };  
+            //                       }));  
+            //                   },  
+            //                   error: function(error) {  
+            //                    alert(error);  
+            //                   }   
+            //               });  
+            //  
+            //           },  
+            //           minLength : 1  
+            //       });  
+         
+         
+         
+         
+            function myFunction() {
+            
+         
+                var s="";
+                var searchTextField = document.getElementById("id_search_word");
+                var paramsToSet;
+                var  term=document.getElementById("id_search_word").value;
+          
+       
+                $.ajax({
+                    url: "http://localhost:8080/virtuoso/api/simpleResources?keyword="+term+"&limit=10&offset=0"
+                }).then(function(data) {
+        
+                 paramsToSet = "[";
+                    for(i=0; i<data.simpleResourceVirtuoso.length; i++ ){
+                     
+                      
+
+                        paramsToSet += "{\"value\" : \"" + data.simpleResourceVirtuoso[i].titles + "\"},";
+
+
+
+                        // $('#id_search_word').append(data.simpleResourceVirtuoso[i].titles);
+                    }
+                    
+                    paramsToSet = paramsToSet.substring(0, paramsToSet.length-1); // to remove the last ","
+                    paramsToSet += "]";
+                    paramsToSet = paramsToSet.toLowerCase();
+                     
+                     alert(paramsToSet);
+        
+                    searchTextField.setAttribute("autocompletesearchparam", paramsToSet);
+      
+                }); 
+                
+                // alert(s);
+            }
+            
+         
+        </script>
     </head>
 
     <body> 
@@ -205,7 +289,8 @@
                                 </td>
                                 <td align="center" style=" padding: 10px;">
 
-                                    <input class="rounded" id="id_search_word"  name="search_word" type="text" style="width:600px;height: 20px;font-size: 12px"/>
+                                    <input class="rounded" id="id_search_word"  name="search_word" type="text" style="width:600px;height: 20px;font-size: 12px" onkeyup="myFunction()" />
+
 
 
 
@@ -259,11 +344,11 @@
                             <input id="idExampleAuthor" type="text" hidden="true" name="example" value="author:Smith G."><a id="Author"  value="author:Smith G." onclick="getExampleValue(this.id);" >author:Smith G.</a>
                         </td>
                         <td>
-                           <input  id="idExampleAuthorA" type="text" hidden="true" name="example" value="author:الحامد"><a id="AuthorA"  value="author:الحامد" onclick="getExampleValue(this.id);">author:الحامد</a>
+                            <input  id="idExampleAuthorA" type="text" hidden="true" name="example" value="author:الحامد"><a id="AuthorA"  value="author:الحامد" onclick="getExampleValue(this.id);">author:الحامد</a>
                         </td>
                         <td>
-                             <input  id="idExampleAuthorC" type="text" hidden="true" name="example" value="author:邓祥征"><a id="AuthorC"  value="author:邓祥征" onclick="getExampleValue(this.id);">author:邓祥征</a>
-                            
+                            <input  id="idExampleAuthorC" type="text" hidden="true" name="example" value="author:邓祥征"><a id="AuthorC"  value="author:邓祥征" onclick="getExampleValue(this.id);">author:邓祥征</a>
+
                         </td>
                         <td>
                             <input  id="idExampleAuthorR" type="text" hidden="true" name="example" value="author:ИвановичСкупский"><a id="AuthorR"  value="author:ИвановичСкупский" onclick="getExampleValue(this.id);">author:ИвановичСкупский</a>
@@ -351,7 +436,17 @@
                 </center>
             </div> 
 
+
+
+
+
             <script language="javascript">
+
+         
+
+    
+                
+    
     
        
                 function cursor_wait(){
@@ -450,13 +545,13 @@
         var s=document.getElementById("idExample"+id).value;
         var e=document.getElementById("id_search_word").value=s;
       
-       $( "#dialogExamples" ).dialog( "close" );  
+        $( "#dialogExamples" ).dialog( "close" );  
       
         //submitSearch();
             
     } 
     
-   $( "#examplebutton" ).click(function() {
+    $( "#examplebutton" ).click(function() {
         $( "#dialogExamples" ).dialog( "open" );
         showDialogExamples();
     });
@@ -489,6 +584,11 @@
        
             
     }  
+   
+   
+    
+    
+    
 </script>    
 
 

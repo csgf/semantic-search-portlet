@@ -38,7 +38,7 @@
 <jsp:useBean id="textHidden2" class="java.lang.String" scope="request"/>
 
 
-
+<%@page import="it.infn.ct.Altmetric"%>
 
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -118,12 +118,11 @@
 
         <%
         
-        
+        String url_lodlive="http://193.205.159.239/LodLiveGraph//";//https://csgf.egi.eu/dariah-sse/LodLiveGraph/";//"http://127.0.0.1:8080/testlodlive/";
         
         String searched_word = renderRequest.getParameter("searched_word");
         String selected_page = renderRequest.getParameter("selected_page");
-        String moreInfo = renderRequest.getParameter("moreInfo");
-        System.out.println("MORE INFO RESULT-->"+moreInfo+ "SELECTED-PAGE-->"+selected_page);
+        
         //String records= renderRequest.getParameter("numRecords");
        // System.out.println("JSP--->cercata "+searched_word+" con "+records+" pagina selezionata "+selected_page);
       //  int numRecords=Integer.parseInt(records);
@@ -213,7 +212,7 @@
                                 </td>
                                 <td>
                                     <input id="examplebutton" class="rounded" type="button" value="Examples" style="text-align: right;font-size: 12px;"  />
-                                  
+
                                 </td>
                                 <!-- <td align="right" style="padding-right: 10px; width: 80px;">
                                     <ul id="nav" class="rounded">
@@ -281,11 +280,11 @@
                                         <input id="idExampleAuthor" type="text" hidden="true" name="example" value="author:Smith G."><a id="Author"  value="author:Smith G." onclick="getExampleValue(this.id);" >author:Smith G.</a>
                                     </td>
                                     <td>
-                                       <input  id="idExampleAuthorA" type="text" hidden="true" name="example" value="author:الحامد"><a id="AuthorA"  value="author:الحامد" onclick="getExampleValue(this.id);">author:الحامد</a>
+                                        <input  id="idExampleAuthorA" type="text" hidden="true" name="example" value="author:الحامد"><a id="AuthorA"  value="author:الحامد" onclick="getExampleValue(this.id);">author:الحامد</a>
                                     </td>
                                     <td>
-                                         <input  id="idExampleAuthorC" type="text" hidden="true" name="example" value="author:邓祥征"><a id="AuthorC"  value="author:邓祥征" onclick="getExampleValue(this.id);">author:邓祥征</a>
-                                        
+                                        <input  id="idExampleAuthorC" type="text" hidden="true" name="example" value="author:邓祥征"><a id="AuthorC"  value="author:邓祥征" onclick="getExampleValue(this.id);">author:邓祥征</a>
+
                                     </td>
                                     <td>
                                         <input  id="idExampleAuthorR" type="text" hidden="true" name="example" value="author:ИвановичСкупский"><a id="AuthorR"  value="author:ИвановичСкупский" onclick="getExampleValue(this.id);">author:ИвановичСкупский</a>
@@ -327,16 +326,16 @@
                                 </tr>
                                 <tr>
                                     <td id="firstColumn">
-                                     
-                                       <input id="idExampleFormat" type="text" hidden="true" name="example" value="format:image/jpeg"><a id="Format" align="left" value="format:image/jpeg" onclick="getExampleValue(this.id);">format:image/jpeg</a>
+
+                                        <input id="idExampleFormat" type="text" hidden="true" name="example" value="format:image/jpeg"><a id="Format" align="left" value="format:image/jpeg" onclick="getExampleValue(this.id);">format:image/jpeg</a>
                                     </td>
                                     <td>
-                                           <input id="idExamplePublisherA" type="text" hidden="true" name="example" value="publisher:مجلة جامعة الملك سعود"><a id="PublisherA" align="left" value="publisher:مجلة جامعة الملك سعود" onclick="getExampleValue(this.id);">publisher:مجلة جامعة الملك سعود</a></li>  <!--King Saud University Journal-->  
-                                       <!-- <input id="idExampleFormatA" type="text" hidden="true" name="example" value="format:image/jpeg"><a id="FormatA" align="left" value="format:image/jpeg" onclick="getExampleValue(this.id);">format:image/jpeg</a>-->
+                                        <input id="idExamplePublisherA" type="text" hidden="true" name="example" value="publisher:مجلة جامعة الملك سعود"><a id="PublisherA" align="left" value="publisher:مجلة جامعة الملك سعود" onclick="getExampleValue(this.id);">publisher:مجلة جامعة الملك سعود</a></li>  <!--King Saud University Journal-->  
+                                        <!-- <input id="idExampleFormatA" type="text" hidden="true" name="example" value="format:image/jpeg"><a id="FormatA" align="left" value="format:image/jpeg" onclick="getExampleValue(this.id);">format:image/jpeg</a>-->
                                     </td>
 
                                     <td>
-                                         <input id="idExamplePublisherC" type="text" hidden="true" name="example" value="publisher:信州大学人文学部"><a id="PublisherC" align="left" value="publisher:信州大学人文学部" onclick="getExampleValue(this.id);">publisher:信州大学人文学部</a></li>  <!--Facoltà di lettere e filosofia-->
+                                        <input id="idExamplePublisherC" type="text" hidden="true" name="example" value="publisher:信州大学人文学部"><a id="PublisherC" align="left" value="publisher:信州大学人文学部" onclick="getExampleValue(this.id);">publisher:信州大学人文学部</a></li>  <!--Facoltà di lettere e filosofia-->
                                         <!--<input id="idExampleFormatC" type="text" hidden="true" name="example" value="format:image/jpeg"><a id="FormatC" align="left" value="format:image/jpeg" onclick="getExampleValue(this.id);">format:image/jpeg</a>-->
                                     </td>
                                     <td>
@@ -350,10 +349,10 @@
                                         <input id="idExamplePublisher" type="text" hidden="true" name="example" value="publisher:elsevier"><a id="Publisher" align="left" value="publisher:elsevier" onclick="getExampleValue(this.id);">publisher:elsevier</a></li>  
                                     </td>
                                     <td>
-                                       <!-- <input id="idExamplePublisherA" type="text" hidden="true" name="example" value="publisher:مجلة جامعة الملك سعود"><a id="PublisherA" align="left" value="publisher:مجلة جامعة الملك سعود" onclick="getExampleValue(this.id);">publisher:مجلة جامعة الملك سعود</a></li>  King Saud University Journal-->
+                                        <!-- <input id="idExamplePublisherA" type="text" hidden="true" name="example" value="publisher:مجلة جامعة الملك سعود"><a id="PublisherA" align="left" value="publisher:مجلة جامعة الملك سعود" onclick="getExampleValue(this.id);">publisher:مجلة جامعة الملك سعود</a></li>  King Saud University Journal-->
                                     </td>
                                     <td>
-                                       <!-- <input id="idExamplePublisherC" type="text" hidden="true" name="example" value="publisher:信州大学人文学部"><a id="PublisherC" align="left" value="publisher:信州大学人文学部" onclick="getExampleValue(this.id);">publisher:信州大学人文学部</a></li>  Facoltà di lettere e filosofia-->
+                                        <!-- <input id="idExamplePublisherC" type="text" hidden="true" name="example" value="publisher:信州大学人文学部"><a id="PublisherC" align="left" value="publisher:信州大学人文学部" onclick="getExampleValue(this.id);">publisher:信州大学人文学部</a></li>  Facoltà di lettere e filosofia-->
                                     </td>
                                     <td>
                                         <input id="idExamplePublisherR" type="text" hidden="true" name="example" value="publisher:Тбилиси"><a id="PublisherR" align="left" value="publisher:Тбилиси" onclick="getExampleValue(this.id);">publisher:Тбилиси</a></li>  <!--Tbilisi-->
@@ -364,7 +363,6 @@
 
                         </div>
                         <input  hidden="true" name="numberOfPage" id="numberOfPage" value="<%=selected_page%>"/>
-                        <input  hidden="true" name="moreInfo" id="idMoreInfo" value="<%=moreInfo%>" />
 
                     </form>
                 </div>
@@ -415,7 +413,7 @@
 
                             <%    int countId=0;
                             ArrayList arrayGlobal=new ArrayList();
-                            
+                             String doi_resource = "";
                             
                             if(arrayVirtuosoResource.size()>0)
                               {
@@ -437,8 +435,27 @@
                                       arraySigleResource.add(arrayIdentifiers);
                                       ArrayList id_string=new ArrayList();
                                       ArrayList id_http=new ArrayList();
+                                      
+                                      
+                                      
+                                       String url = "";
+                                       String url_altmetric="no link";
 
                                       for(int idf=0; idf<arrayIdentifiers.size();idf++){
+                                          
+                                           if (arrayIdentifiers.get(idf).toString().contains("doi")) {
+                                                        if(arrayIdentifiers.get(idf).toString().contains("info:"))
+                                                     {
+                                                        doi_resource = arrayIdentifiers.get(idf).toString().substring(9).toString();
+                                                      }else{
+                                                         doi_resource = arrayIdentifiers.get(idf).toString().substring(5).toString();   
+                                                      }
+                                                        System.out.println("DOI=> "+doi_resource);
+                                                        url_altmetric=Altmetric.getLinkAlmetricFromDOI(doi_resource);
+                              
+                                                    }
+                                          
+                                          
                                          if(arrayIdentifiers.get(idf).toString().length()>4 && arrayIdentifiers.get(idf).toString().substring(0,4).equals("http"))
                                              id_http.add(arrayIdentifiers.get(idf).toString());
                                          else
@@ -466,6 +483,17 @@
                                                 <ul class="klios_list">
                                                     <form id="checkCitations" action="<portlet:actionURL portletMode="view"><portlet:param name="PortletStatus" value="ACTION_GET_CITATIONS_GSCHOLAR"/></portlet:actionURL>" method="post">
                                                         <input id="title_GS" name="title_GS" value="" hidden="true" />
+
+
+                                                        <input id="chek_altmetric" name="chek_altmetric" value="" hidden="true" />
+                                                        <input id="url_altmetric" name="url_altmetric" value="" hidden="true" />
+                                                        <input id="doi_altmetric" name="doi_altmetric" value="" hidden="true" />
+
+                                                        <input id="url_altmetric_<%=countId%>" name="url_altmetric" value="<%=url_altmetric%>" hidden="true" />
+                                                        <input id="doi_altmetric_<%=countId%>" name="doi_altmetric" value="<%=doi_resource%>" hidden="true" />
+
+
+
                                                         <%
                                              
                                                           for(int t=0; t<arrayTitles.size(); t++){
@@ -476,13 +504,16 @@
                                                                 String link= id_http.get(0).toString(); 
 
                                                         %>
-                                                        <li><a href="<%= link %>" class="title" target="_blank" title="<%= link%>"><%= title %> </a> 
+                                                        <li><a href="<%= link %>" target="_blank" title="<%= link%>"><%= title %> </a> 
                                                            <!-- <img id="counterResoureGS_<%=countId%>" style="cursor: pointer;width:20px;height: 20px;" src="<%=renderRequest.getContextPath()%>/images/gscholar_icon.png" onclick="CheckCitationsImage(<%=countId%>,<%=t%>)" />
                                                             
                                                             <a href="http://localhost:8080/testlodlive/?<%=resource%>" target="_blank"><img id="<%=resource%>" style="cursor: pointer;width:80px;height: 25px;" src="<%=renderRequest.getContextPath()%>/images/lodliveLogo200px.jpg" /></a></li>-->
-                                                            [<a id="counterResoureGS_<%=countId%>" href="#" style="cursor: pointer;"  onclick="CheckCitationsImage(<%=countId%>,<%=t%>)">Citations</a>]
-                                                            
-                                                            [<a href="http://www.chain-project.eu/LodLiveGraph/?<%=resource%>" target="_blank" id="<%=resource%>" style="cursor: pointer;">Linked Data</a>]</li>
+                                                            (<a id="counterResoureGS_<%=countId%>" href="#" style="cursor: pointer;"  onclick="CheckCitationsImage(<%=countId%>,<%=t%>)">Citations</a>)
+
+
+                                                            (<a id ="counterResoureAlt_<%=countId%>" href="#"  style="cursor: pointer;" onclick="CheckAltmetrics(<%=countId%>,<%=t%>,'<%=url_altmetric%>','<%=doi_resource%>')" >Altmetrics</a>)
+
+                                                            (<a href="<%=url_lodlive%>?<%=resource%>" target="_blank" id="<%=resource%>" style="cursor: pointer;">Linked Data</a>)</li>
                                                         <input id="titleResourceVirtuoso<%=countId+"--"+t%>" name="titleResourceVirtuoso" value="<%= title %>" hidden="true" />
 
 
@@ -490,17 +521,20 @@
                                                         <%
                                                         }else{%>
                                                         <li> <input id="titleResourceVirtuoso<%=countId+"--"+t%>" name="titleResourceVirtuoso" value="<%= title %>" hidden="true" /><i> <%= title %></i> 
-                                                            [<a id="counterResoureGS_<%=countId%>" href="#" style="cursor: pointer;" onclick="CheckCitationsImage(<%=countId%>,<%=t%>)">Citations</a>]
-                                                            
-                                                             [<a href="http://www.chain-project.eu/LodLiveGraph/?<%=resource%>" target="_blank" id="<%=resource%>" style="cursor: pointer;">Linked Data</a>]</li>
-                                                            <!--<img id="counterResoureGS_<%=countId%>" style="cursor: pointer; width:20px;height: 20px;" src="<%=renderRequest.getContextPath()%>/images/gscholar_icon.png" onclick="CheckCitationsImage(<%=countId%>,<%=t%>)" />
-                                                             <a href="http://localhost:8080/testlodlive/?<%=resource%>" target="_blank"> <img id="<%=resource%>" style="cursor: pointer;width:80px;height: 25px;" src="<%=renderRequest.getContextPath()%>/images/lodliveLogo200px.jpg" /></a></li>-->
-                                                            <%
-                                                                }
-                                                                }
-                                                                }
+                                                            (<a id="counterResoureGS_<%=countId%>" href="#" style="cursor: pointer;" onclick="CheckCitationsImage(<%=countId%>,<%=t%>)">Citations</a>)
 
-                                                            %>
+
+                                                            (<a id ="counterResoureAlt_<%=countId%>" href="#"  style="cursor: pointer;" onclick="CheckAltmetrics(<%=countId%>,<%=t%>,'<%=url_altmetric%>','<%=doi_resource%>')">Altmetrics</a>)
+
+                                                            (<a href="<%=url_lodlive%>?<%=resource%>" target="_blank" id="<%=resource%>" style="cursor: pointer;">Linked Data</a>)</li>
+                                                           <!--<img id="counterResoureGS_<%=countId%>" style="cursor: pointer; width:20px;height: 20px;" src="<%=renderRequest.getContextPath()%>/images/gscholar_icon.png" onclick="CheckCitationsImage(<%=countId%>,<%=t%>)" />
+                                                            <a href="http://localhost:8080/testlodlive/?<%=resource%>" target="_blank"> <img id="<%=resource%>" style="cursor: pointer;width:80px;height: 25px;" src="<%=renderRequest.getContextPath()%>/images/lodliveLogo200px.jpg" /></a></li>-->
+                                                        <%
+                                                            }
+                                                            }
+                                                            }
+
+                                                        %>
 
                                                     </form>    
                                                 </ul>
@@ -600,7 +634,7 @@
                                             </td>
                                         </tr>
 
-                                      <!--  <tr>
+                                        <tr>
                                             <td>
                                                 <form id="checkCitations" action="<portlet:actionURL portletMode="view"><portlet:param name="PortletStatus" value="ACTION_GET_CITATIONS_GSCHOLAR"/></portlet:actionURL>" method="post">
                                                     <br>
@@ -608,11 +642,16 @@
                                                     <input id="title_GS" name="title_GS" value="" hidden="true" />
 
 
+                                                    <input id="chek_altmetric" name="chek_altmetric" value="" hidden="true" />
+                                                    <input id="url_altmetric" name="url_altmetric" value="" hidden="true" />
+                                                    <input id="doi_altmetric" name="doi_altmetric" value="" hidden="true" />
+
                                                     <p id="counterResoureGS_<%=countId%>" style="cursor: pointer;color: green;" onclick="CheckCitations(this.id)">Check citations on Google Scholar</p>    
+                                                    <p id ="counterResoureAlt_<%=countId%>" style="cursor: pointer;color: green;" onclick="CheckAltmetrics2(this.id)">Check altmetrics on Altmetric</p>    
                                                 </form>
                                             </td> 
 
-                                        </tr>  -->
+                                        </tr>  
 
                                         <tr>
 
@@ -687,7 +726,6 @@
                                             <td>
                                                 <form id="searchDetail" action="<portlet:actionURL portletMode="view"><portlet:param name="PortletStatus" value="ACTION_GET_MORE_INFO"/></portlet:actionURL>" method="post">
                                                     <input id="idResource" name="idResource" value="<%= resource %>" hidden="true" />
-                                                    <input id="search_word" name="search_word" value="<%= searched_word %>" hidden="true" />
                                                     <input id="title_GS2" name="title_GS" value="" hidden="true" />
 
 
@@ -768,9 +806,466 @@
 
 
 
+                    <!--  <div  class="tabbertab" title="Graphs " >        
+  
+  
+                          <br>
+  
+                          <fieldset class="fieldsetGraphAll">
+                              <legend>Filter to view a struct of Resource (max 10 Resource)</legend>
+                              <div>
+                                  <p>Select one or more Resources to view</p>
+                                  <div class="multiselect" id="multiselecteAll">
+  
+                    <%for(int k=0;k<arrayGlobal.size();k++)
+                {
+                   ArrayList result=(ArrayList)arrayGlobal.get(k);
+                    String resource=(String)result.get(0);
+                   //String resource="ciao";
+                    ArrayList titles=(ArrayList)result.get(1);
+                    ArrayList authors=(ArrayList)result.get(3);
+                    ArrayList sources=(ArrayList)result.get(5);
+                        
                             
-                      
+                    %>
+                    <label><input type="checkbox" name="option[]" value="<%=k%>" /><b style="color: red;">[R<%=(k+1)%>]</b>&nbsp;<%=titles.get(0).toString()%></label>
+                    <% }
+                    
+                    %>
+
+
+            </div>
+
+            <div class="filterGraphAll">
+                <p><b id="counterResource">0</b> Resources Selected</p>
+                <p>Select a Filter for visualization:</p> 
+                <select id="FilterArbor" NAME="comboPaper" >
+
+                    <option value="Authors" selected>Authors</option>
+                    <option value="Subjects">Subjects</option>
+                    <option value="Publishers">Publishers</option>
+
+                </select>
+
+                <br><br>
+                <input  type="button" value="Clear" onclick="clearCheck()" >
+                <input style="display: inline-block;" type="button" value="View" onclick="viewGraph()" >
+                <p><font size="1">(To clear the graph wait until the particles are firmly)</font></p>
+            </div>
+        </div>
+
+        <div id="progressbar"></div>         
+
+    </fieldset>        
+    <canvas id="viewport" width="900" height="600" ></canvas>
+
+
+
+    <script type="text/javascript">
+        var $= jQuery.noConflict(true);                   
+        ArrayResource=new Array();
+        ArrayTitle=new Array();
+        ArrayAuthor=new Array();
+        ArrayDescription=new Array();
+        ArraySubject=new Array();
+        ArrayPublisher=new Array();
+        ArraySource=new Array();
+                    <% 
+                    // HandlingOpenDOAR doar=new HandlingOpenDOAR();
+                    for(int i=0;i<arrayGlobal.size();i++)
+                    {
+                        ArrayList result=(ArrayList)arrayGlobal.get(i);
+                        String resource=(String)result.get(0);
+                        //ArrayList titles=(ArrayList)result.get(1);
+                        ArrayList authors=(ArrayList)result.get(3);
+                                
+                        ArrayList subjects=(ArrayList)result.get(6);
+                        ArrayList publishers=(ArrayList)result.get(7);
+                    %>
+                        
+                        ArrayResource["<%=i%>"]="<%=resource%>";
+                        
+                    
+                    <%
+                                
+     
+                            String myAuthors="";
+                                
+                           for (int z=0;z<authors.size();z++)
+                           { String elemAuthor=authors.get(z).toString();
+                                
+                            String [] list_Authors=elemAuthor.split(";");
+                            for(int j=0;j<list_Authors.length;j++)
+                            {
                             
+                                String author= list_Authors[j].toString();
+                                myAuthors=myAuthors+"##"+author;
+                            }
+                    %> ArrayAuthor["<%=i%>"]="<%=myAuthors%>"; <% }
+
+                            String mySubjects="";
+                    for(int j=0;j<subjects.size();j++)
+                    {
+                            
+                        String subject= subjects.get(j).toString();
+                        mySubjects=mySubjects+"##"+subject;
+                    }
+                    %> ArraySubject["<%=i%>"]="<%=mySubjects%>";  <% 
+                            
+                        String myPublishers="";
+                    for(int j=0;j<publishers.size();j++)
+                    {
+                            
+                        String publisher= publishers.get(j).toString();
+                        myPublishers=myPublishers+"##"+publisher;
+                    }
+                    %> ArrayPublisher["<%=i%>"]="<%=myPublishers%>";  <%
+                    
+                    
+                                
+                        }//chiudo il for principale
+                    %>
+            
+                        var counter=0;
+                        arrayIdResourceSelected = new Array(); 
+                        var counterInpuText=document.getElementById("counterResource");
+                                    
+                        var CLR = {
+                            resource:"red",
+                            dc_resource:"#FF6666",
+                            title:"green",
+                            description:"#9ACD32",
+                            subject:"#FF9900",
+                            subjectValue:"#FFE4C4",
+                            author:"#969696",
+                            authorValue:"#D3D3D3",
+                            publisherValue:"#ADD8E6",
+                            publisher:"#008B8B",
+                            source:"#FFB6C1",
+                            black:"black"
+                        }                        
+            
+                
+            
+                        jQuery.fn.multiselect = function() {
+                            //var $= jQuery.noConflict(true);                   
+                           
+                            
+                            $(this).each(function() {
+                    
+                  
+                                //var counterInpuText=document.getElementById("counterResource");
+                                var checkboxes = $(this).find("input:checkbox");
+                                checkboxes.each(function() {
+                                     
+                                    var checkbox = jQuery(this);
+                                    // Highlight pre-selected checkboxes
+                                    if (checkbox.attr("checked"))
+                                    {
+                                         
+                                        checkbox.parent().addClass("multiselect-on");
+                                    }
+                                    // Highlight checkboxes that the user selects
+                                    checkbox.click(function() {
+                                        if (checkbox.attr("checked"))
+                                        {     
+                                            
+                                            if(counter<10) { 
+                                                //alert("ID CHECKBOX: "+checkbox.val());
+                                                arrayIdResourceSelected.push(checkbox.val());
+                                                checkbox.parent().addClass("multiselect-on");       
+                                                counter=counter+1;
+                                                counterInpuText.innerHTML=counter;
+                                            }
+                                            else
+                                            {
+                                                //var $= jQuery.noConflict(true);                   
+                                                checkbox.removeAttr('checked');
+                                                checkbox.parent().removeClass("multiselect-on");
+                                                //alert("Select max 10 records");
+                                                $( "#dialogMaxResource" ).dialog({
+                        
+                                                    width: 300, 
+                                                    height:150,
+                                                    title:"ATTENTION",
+                                                    position: "center",
+                                                    buttons: [
+                                                        {
+                                                            text: "Ok",
+                                                            click: function() {
+                                                                $(this).dialog("close");
+                                                            }
+                                                        }
+                                                    ],
+                                                    hide: { effect: 'drop', direction: "down" },
+                                                    resizable: false
+                        
+
+                                                });
+                                                $( "#dialogMaxResource" ).text("Limite raggiunto");
+                                            }
+                                
+                                        }
+                                        else
+                                        {
+                           
+                                            counter=counter-1;
+                                            checkbox.parent().removeClass("multiselect-on");
+                                            counterInpuText.innerHTML=counter;
+                                            //arrayIdResourceSelected.removeEl(checkbox.val());
+                                            // alert("CHECK DA ELIMINARE: "+checkbox.val())
+                                            controlElemArray(arrayIdResourceSelected,checkbox.val());
+                            
+                                        }
+                                    });
+                                });
+            
+            
+                            });
+                
+                        };
+            
+                        jQuery(".multiselect").multiselect();
+            
+                        function viewGraph()
+                        {
+                            var filterSel = document.getElementById('FilterArbor').value;  
+                            //alert("OK VIEW");
+                            if(filterSel=="Authors")
+                            {
+                        
+                                loadResourceAuthor(arrayIdResourceSelected);
+                            }
+                            if(filterSel=="Subjects")
+                            {
+                                loadResourceSubject(arrayIdResourceSelected);
+
+                            }
+                    
+                           
+                            if(filterSel=="Publishers")
+                            {
+                                loadResourcePublisher(arrayIdResourceSelected);
+
+                            }
+                           
+
+                
+                        }
+            
+                        function controlElemArray(myArray,val)
+                        {
+                            for (var i=0;i<myArray.length;i++)
+                            {
+                                var valueArray=myArray[i];
+                                if(val==valueArray)
+                                    myArray.splice(i,1);
+                         
+                            }
+                        }
+            
+            
+                        function clearCheck()
+                        {
+                
+                            arrayIdResourceSelected.length=0;
+                            //clearCanvas(context, canvas);
+                    
+                            jQuery('.multiselect').each(function() {
+
+                                $(this).each(function () {
+                                    var checkboxes = $(this).find("input:checkbox");
+                                    checkboxes.each(function() {
+                                        var checkbox = jQuery(this);
+                                        // Highlight pre-selected checkboxes
+                                        if (checkbox.attr("checked"))
+                                        {
+                            
+                                            checkbox.parent().removeClass("multiselect-on");
+                                            checkbox.removeAttr('checked');
+                                            counter=0;
+                                            counterInpuText.innerHTML=counter;
+                                        }
+                                    });
+                                });
+                            });
+                    
+                            clearCanvas();                 
+                        }
+            
+                        function clearCanvas() {
+                            var canvas = document.getElementById('viewport');
+                            var context = canvas.getContext('2d');
+                            context.clearRect(0, 0, canvas.width, canvas.height); 
+                        }
+
+                        function loadResourceAuthor(arrayIdSelected)
+                        {
+
+
+                            //var canvas = document.getElementById('viewport');
+                            //var context = canvas.getContext('2d');
+                            clearCanvas();
+                            //context.clearRect(0, 0, canvas.width, canvas.height);                      
+                    
+                            var sys = arbor.ParticleSystem();
+                            sys.parameters({stiffness:900, repulsion:2000, gravity:true, dt:0.015});
+    
+                            sys.renderer = Renderer("#viewport");
+    
+                            
+                            for(var j=0;j<arrayIdSelected.length;j++)
+                            {
+                                var indexToView=arrayIdSelected[j];
+                                var indexToViewInInteger=parseInt(indexToView);
+                                var resourceNode = sys.addNode("RESOURCEAuthor"+indexToView,{color:CLR.resource,shape:"dot",alpha:1,label:"[R"+(indexToViewInInteger+1)+"]"});
+                                
+                                var authors=ArrayAuthor[indexToView];
+               
+                                var listAuthors=authors.split("##");
+                                
+                                if (listAuthors.length > 1) {
+                
+                                    var authorNode=sys.addNode("AUTHOR"+indexToView,{color:CLR.author,alpha:1,label:"Author"+(indexToViewInInteger+1)+" (num"+(listAuthors.length-1)+")"});
+                                    authorNode.data.typeDescription=false;
+                                    var edgeResourceAuthor=sys.addEdge(resourceNode,authorNode,{'name':'Onto:hasAuthor'});
+                                    edgeResourceAuthor.data.connectionclass=true;
+                                    edgeResourceAuthor.data.directed=true;
+        
+                                    for(var i=1;i<listAuthors.length; i++){
+                                        
+                                        var author=listAuthors[i];
+                                        var authorNodeValue=sys.addNode(author,{color:CLR.authorValue,alpha:0,label:author});
+                                        authorNodeValue.data.typeDescription=false;
+                                        var edgeAuthorName=sys.addEdge(authorNode,authorNodeValue,{'name':''});
+                                        edgeAuthorName.data.directed=true;
+                                        edgeAuthorName.data.color=CLR.author;
+                   
+
+                                    }   
+             
+                                }
+            
+                            }                                   
+                        }
+
+                        function loadResourceSubject(arrayIdSelected)
+                        {
+
+
+                            //var canvas = document.getElementById('viewport');
+                            //var context = canvas.getContext('2d');
+                            clearCanvas();
+                            //context.clearRect(0, 0, canvas.width, canvas.height);                      
+                    
+                            var sys = arbor.ParticleSystem();
+                            sys.parameters({stiffness:900, repulsion:2000, gravity:true, dt:0.015});
+    
+                            sys.renderer = Renderer("#viewport");
+    
+                            // alert("NUM SELECT: "+arrayIdSelected.length);        
+                            for(var j=0;j<arrayIdSelected.length;j++)
+                            {
+                                var indexToView=arrayIdSelected[j];
+                                var indexToViewInInteger=parseInt(indexToView);
+                                var resourceNode = sys.addNode("RESOURCESubject"+indexToView,{color:CLR.resource,shape:"dot",alpha:1,label:"[R"+(indexToViewInInteger+1)+"]"});
+                
+                                var subjects=ArraySubject[indexToView];
+               
+                                var listSubjects=subjects.split("##");
+                                // alert ("AUTHOR :"+listAuthors.length);
+                                if (listSubjects.length > 1) {
+                                    var subjectNode=sys.addNode("SUBJECT"+indexToView,{color:CLR.subject,alpha:1,label:"Subject"+(indexToViewInInteger+1)+" (num"+(listSubjects.length-1)+")"});
+                                    subjectNode.data.typeDescription=false;
+                                    var edgeResourceSubject=sys.addEdge(resourceNode,subjectNode,{'name':'dc:subject'});
+                                    edgeResourceSubject.data.connectionclass=true;
+                                    edgeResourceSubject.data.directed=true;
+                           
+        
+                                    for(var i=1;i<listSubjects.length; i++){
+                                        // alert ("AUTHOR_"+i+" :"+listAuthors[i]);
+                                        var subject=listSubjects[i];
+                                        var subjectNodeValue=sys.addNode(subject,{color:CLR.subjectValue,alpha:0,label:subject});
+                                        subjectNodeValue.data.typeDescription=false;
+                                        var edgeSubjectValue=sys.addEdge(subjectNode,subjectNodeValue,{'name':''});
+                                        edgeSubjectValue.data.directed=true;
+                                        edgeSubjectValue.data.color=CLR.black;
+                   
+
+                                    }   
+             
+                                }
+            
+                            }                                   
+                        }  
+                
+                
+                        function loadResourcePublisher(arrayIdSelected)
+                        {
+
+
+                            //var canvas = document.getElementById('viewport');
+                            //var context = canvas.getContext('2d');
+                            clearCanvas();
+                            //context.clearRect(0, 0, canvas.width, canvas.height);                      
+                    
+                            var sys = arbor.ParticleSystem();
+                            sys.parameters({stiffness:900, repulsion:2000, gravity:true, dt:0.015});
+    
+                            sys.renderer = Renderer("#viewport");
+    
+                            // alert("NUM SELECT: "+arrayIdSelected.length);        
+                            for(var j=0;j<arrayIdSelected.length;j++)
+                            {
+                                var indexToView=arrayIdSelected[j];
+                                var indexToViewInInteger=parseInt(indexToView);
+                                var resourceNode = sys.addNode("RESOURCEPublisher"+indexToView,{color:CLR.resource,shape:"dot",alpha:1,label:"[R"+(indexToViewInInteger+1)+"]"});
+                
+                                var publishers=ArrayPublisher[indexToView];
+               
+                                var listPublihers=publishers.split("##");
+                                // alert ("AUTHOR :"+listAuthors.length);
+                                if (listPublihers.length > 1) {
+                                    var publisherNode=sys.addNode("PUBLISHER"+indexToView,{color:CLR.publisher,alpha:1,label:"Publisher"+(indexToViewInInteger+1)+" (num"+(listPublihers.length-1)+")"});
+                                    publisherNode.data.typeDescription=false;
+                                    var edgeResourcePublisher=sys.addEdge(resourceNode,publisherNode,{'name':'dc:publisher'});
+                                    edgeResourcePublisher.data.connectionclass=true;
+                                    edgeResourcePublisher.data.directed=true;
+                           
+        
+                                    for(var i=1;i<listPublihers.length; i++){
+                                        // alert ("AUTHOR_"+i+" :"+listAuthors[i]);
+                                        var publisher=listPublihers[i];
+                                        var publisherNodeValue=sys.addNode(publisher,{color:CLR.publisherValue,alpha:0,label:publisher});
+                                        publisherNodeValue.data.typeDescription=false;
+                                        var edgePublisherValue=sys.addEdge(publisherNode,publisherNodeValue,{'name':''});
+                                        edgePublisherValue.data.directed=true;
+                                        edgePublisherValue.data.color=CLR.black;
+                   
+
+                                    }   
+             
+                                }
+            
+                            }                                   
+                        }
+                
+                        
+                        
+                       
+
+ 
+                        
+                        
+                        
+                
+            
+                </script>                        
+
+            </div> -->
+
+
+
                     <!--div menu-->
                 </div>
 
@@ -792,7 +1287,6 @@
                                   
                     var nvalue=parseInt(document.getElementById("numberOfPage").value);
                     document.getElementById("numberOfPage").value=nvalue+1;
-                    document.getElementById("idMoreInfo").value="NO";
                                     
                     // alert("VALUE MORE----> "+document.getElementById("numberOfPage").value);
                     document.forms["search_form"].submit();
@@ -877,35 +1371,143 @@
                         document.forms["searchDetail"].submit();
                     } 
                 
+//                
+//                    function CheckCitations(x)
+//                    {
+//                    
+//                        var countResource=x.toString().split("counterResoureGS_")[1];
+//                        //cursor_wait();
+//                        // var resource=x.toString().split("counterResoureGS_")[1];
+//                        // document.getElementById('idResource').value=resource;
+//                        // document.forms["searchDetail"].submit();
+//                        var myTitle=document.getElementById("titleResourceVirtuoso"+countResource+"--0").value;
+//                        //document.getElementById("control_GS").value="true";
+//                        document.getElementById('title_GS').value=myTitle;
+//                        document.getElementById('chek_altmetric').value="NO";
+//                        //alert("OK---->"+myTitle);
+//                        document.forms["checkCitations"].submit();
+//                    }
+//                
+//                    function CheckCitationsImage(countId,j)
+//                    {
+//                    
+//                    
+//                        var myTitle=document.getElementById("titleResourceVirtuoso"+countId+"--"+j).value; 
+//                    
+//                        // alert("OK---->"+myTitle); 
+//                        document.getElementById('title_GS').value=myTitle;
+//                        document.getElementById('chek_altmetric').value="NO";
+//                        
+//                        document.forms["checkCitations"].submit();
+//                    }
+//                    function CheckAltmetrics(countId,j,url,doi)
+//                    {
+//                    
+//                    
+//                        var myTitle=document.getElementById("titleResourceVirtuoso"+countId+"--"+j).value; 
+//                    
+//                        // alert("OK---->"+url); 
+//                        document.getElementById('title_GS').value=myTitle;
+//                        // alert("OK--2-->");
+//                        document.getElementById('chek_altmetric').value="SI";
+//                     
+//                        document.getElementById('url_altmetric').value=url;
+//                        document.getElementById('doi_altmetric').value=doi;
+//                        // alert("OK--3-->");
+//                        document.forms["checkCitations"].submit();
+//                    }
+//    
+//       function CheckAltmetrics2(x)
+//        {
+//            alert("DOI--->"+x);         
+//                    
+//            var countResource=x.toString().split("counterResoureAlt_")[1];
+//                   
+//            alert("countResource--->"+countResource);       
+//        //    var myTitle=document.getElementById("titleResourceVirtuoso"+countResource+"--1").value;
+//         //   alert("myTitle--->"+myTitle);
+//            var url=document.getElementById("url_altmetric_"+countResource).value;
+//            alert("url--->"+url);
+//            var doi=document.getElementById("doi_altmetric_"+countResource).value;
+//          alert("DOI--->"+doi);
+//            document.getElementById('title_GS').value=myTitle;
+//            document.getElementById('chek_altmetric').value="SI";
+//            document.getElementById("url_altmetric").value=url;
+//            document.getElementById("doi_altmetric").value=doi;
+//                     
+//            document.forms["checkCitations"].submit();
+//        }
+   
+   
+        function CheckCitationsImage(countId,j)
+        {
+                    
+                    
+            var myTitle=document.getElementById("titleResourceVirtuoso"+countId+"--"+j).value; 
+                    
+            //alert("OK---->"+myTitle); 
+            document.getElementById('title_GS').value=myTitle;
+            document.getElementById('chek_altmetric').value="NO";
+            document.forms["checkCitations"].submit();
+        }
                 
-                    function CheckCitations(x)
-                    {
+        function CheckAltmetrics(countId,j,url,doi)
+        {
                     
-                        var countResource=x.toString().split("counterResoureGS_")[1];
-                        //cursor_wait();
-                        // var resource=x.toString().split("counterResoureGS_")[1];
-                        // document.getElementById('idResource').value=resource;
-                        // document.forms["searchDetail"].submit();
-                        var myTitle=document.getElementById("titleResourceVirtuoso"+countResource+"--0").value;
-                        //document.getElementById("control_GS").value="true";
-                        document.getElementById('title_GS').value=myTitle;
-                   
-                        //alert("OK---->"+myTitle);
-                        document.forms["checkCitations"].submit();
-                    }
+                    
+            var myTitle=document.getElementById("titleResourceVirtuoso"+countId+"--"+j).value; 
+                    
+            // alert("OK---->"+url); 
+            document.getElementById('title_GS').value=myTitle;
+            // alert("OK--2-->");
+            document.getElementById('chek_altmetric').value="SI";
+                     
+            document.getElementById('url_altmetric').value=url;
+            document.getElementById('doi_altmetric').value=doi;
+            // alert("OK--3-->");
+            document.forms["checkCitations"].submit();
+        }
                 
-                    function CheckCitationsImage(countId,j)
-                    {
+               
+                
+                
+        function CheckCitations(x)
+        {
                     
-                    
-                        var myTitle=document.getElementById("titleResourceVirtuoso"+countId+"--"+j).value; 
-                    
-                        // alert("OK---->"+myTitle); 
-                        document.getElementById('title_GS').value=myTitle;
+            var countResource=x.toString().split("counterResoureGS_")[1];
                    
-                        document.forms["checkCitations"].submit();
-                    }
+            var myTitle=document.getElementById("titleResourceVirtuoso"+countResource+"--1").value;
+                   
+            document.getElementById('title_GS').value=myTitle;
+            document.getElementById('chek_altmetric').value="NO";
+            // alert("OK---->"+myTitle);
+            document.forms["checkCitations"].submit();
+        }
+                
+        function CheckAltmetrics2(x)
+        {
+                    
+             
+            var countResource=x.toString().split("counterResoureAlt_")[1];
+                   
+            //var myTitle=document.getElementById("titleResourceVirtuoso"+countResource+"--1").value;
+            var url=document.getElementById("url_altmetric_"+countResource).value;
+          
+            var doi=document.getElementById("doi_altmetric_"+countResource).value;
+           
+            //document.getElementById("title_GS").value=myTitle;
+            document.getElementById("chek_altmetric").value="SI";
+            document.getElementById("url_altmetric").value=url;
+            document.getElementById("doi_altmetric").value=doi;
+                     
+           
+            document.forms["checkCitations"].submit();
+        }
     
+   
+   
+   
+                    
     
                     function cursor_wait(){
                         document.body.style.cursor = "wait";
@@ -939,7 +1541,6 @@
                         // alert("PRIMA-->"+document.getElementById("numberOfPage").value);
          
                         document.getElementById("numberOfPage").value="";
-                        document.getElementById("idMoreInfo").value="NO";
                         // alert("DOPO-->"+document.getElementById("numberOfPage").value);
                         document.forms["search_form"].submit();
       
@@ -1035,13 +1636,13 @@
                     }  
                     
                     
-                  function  ViewGraphTab(id){
-                       alert("sono qua" +id);
+                    function  ViewGraphTab(id){
+                        alert("sono qua" +id);
                   
                 <% //ApiVirtuosoForGraph.getRecordVirtuoso();
                     
-               // System.out.println("ouuuuuuuuu");
-                 %>
+                System.out.println("ouuuuuuuuu");
+                %>
                   
                         
                         

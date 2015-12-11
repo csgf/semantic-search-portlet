@@ -197,7 +197,7 @@ public class SemanticSearch_portlet extends GenericPortlet {
         ACTION_INPUT // Called before to show the INPUT view
         //,ACTION_SUBMIT     // Called after the user press the submit button   
         , ACTION_SEMANTIC_SEARCH_ALL_LANGUAGE, ACTION_QUERY_FROM_LANGUAGE_SUBJECT, ACTION_GET_MORE_INFO, ACTION_SELECT_LANGUAGE, ACTION_NUMBER_OF_PAGE,
-        ACTION_GET_CITATIONS_GSCHOLAR,ACTION_GRAPH_RESOURCE
+        ACTION_GET_CITATIONS_GSCHOLAR, ACTION_GRAPH_RESOURCE, ACTION_GET_ALTMETRICS
     }
 
     private enum Views {
@@ -205,7 +205,7 @@ public class SemanticSearch_portlet extends GenericPortlet {
         VIEW_INPUT // View containing application input fields
         // ,VIEW_SUBMIT     // View reporting the job submission     
         , VIEW_SEMANTIC_SEARCH_ALL_LANGUAGE, VIEW_QUERY_FROM_LANGUAGE_SUBJECT,
-        VIEW_GET_MORE_INFO, VIEW_SELECT_LANGUAGE, VIEW_CITATIONS_GSCHOLAR
+        VIEW_GET_MORE_INFO, VIEW_SELECT_LANGUAGE, VIEW_CITATIONS_GSCHOLAR, VIEW_ALTMETRICS
     }
 
     // The init values will be read form portlet.xml from <init-param> xml tag
@@ -281,17 +281,21 @@ public class SemanticSearch_portlet extends GenericPortlet {
         String numberPage;
         String numRecordsForPage;
         String title_GS;
-        String moreInfo;
-       
+        //ALTMETRIC
+        String chek_altmetric;
+        String url_altmetric;
+        String doi_altmetric;
         // Some user level information
         // must be stored as well
         String username;
         String timestamp;
 
         public App_Input() {
-            search_word = selected_language = nameSubject = idResouce = numberPage = numRecordsForPage =
-                    jobIdentifier = username = timestamp = title_GS = moreInfo="";
+            search_word = selected_language = nameSubject = idResouce = numberPage = numRecordsForPage = jobIdentifier = username = timestamp = title_GS = "";
             // numberPage=0;
+            chek_altmetric = "";
+            url_altmetric = "";
+            doi_altmetric = "";
         }
     } // App_Input
     public String searched_word;
@@ -299,9 +303,6 @@ public class SemanticSearch_portlet extends GenericPortlet {
     public String language;
     // public String selected_page;
     public String selected_graph;
-    
-    public String selected_page = "";
-    
     //public int numRecords;
     public int numTotRecords;
     public ArrayList arrayLanguageSubject;
@@ -423,7 +424,7 @@ public class SemanticSearch_portlet extends GenericPortlet {
 
         // int numRecords = 0;
         //   String[] sArray=null;
-        
+        String selected_page = "";
 
         // Determine the application pathname                
         portletSession = request.getPortletSession();
@@ -507,12 +508,7 @@ public class SemanticSearch_portlet extends GenericPortlet {
                         // Process input fields and files to upload
                         getInputForm(request, appInput);
 
-                        
-                        if (appInput.moreInfo == null) {
-                                appInput.moreInfo = "NO";
-                        }
-                        
-                
+
                         //  searched_word=appInput.search_word;
 
                         // numRecords=SemanticQuery.getNumRecords(searched_word);
@@ -522,10 +518,7 @@ public class SemanticSearch_portlet extends GenericPortlet {
 
                         // sArray = (String[]) SemanticQuery.queryVirtuosoResource(appInput.search_word,selected_page).toArray(new String[SemanticQuery.arrayVirtuosoResource.size()]);;
 
-                        
-                        System.out.println("MOREINFO ACTION: "+appInput.moreInfo);
-                        
-                        if (!appInput.moreInfo.equals("OK")){
+
 
 
                         if (appInput.numberPage == null || appInput.numberPage == "") {
@@ -558,16 +551,9 @@ public class SemanticSearch_portlet extends GenericPortlet {
                             // virtuosoResourceList=SemanticQuery.queryVirtuosoResource(appInput.search_word, selected_page);
                             sArray = (String[]) virtuosoResourceList.toArray(new String[SemanticQuery.arrayVirtuosoResource.size()]);
                         }
-                        
-                        }
-                        else
-                            System.out.println("NON FACCIO LA QUERY ci sono elementi --->"+sArray.length);
-                        
-                        
                         response.setRenderParameter("PortletStatus", "" + Views.VIEW_SEMANTIC_SEARCH_ALL_LANGUAGE);
                         response.setRenderParameter("searched_word", appInput.search_word);
                         response.setRenderParameter("selected_page", selected_page);
-                        response.setRenderParameter("moreInfo", appInput.moreInfo);
 
                         // response.setRenderParameter("numRecords", String.valueOf(numRecords));
                         // String[] sArray = (String[])SemanticQuery.queryVirtuosoResource(appInput.search_word,selected_page).toArray(new String[SemanticQuery.arrayVirtuosoResource.size()]);
@@ -669,7 +655,6 @@ public class SemanticSearch_portlet extends GenericPortlet {
 
 
                         response.setRenderParameter("info_GS", info_GS);
-                        response.setRenderParameter("searched_word", appInput.search_word);
 
                         // Send the jobIdentifier and assign the correct view                    
                         response.setRenderParameter("PortletStatus", "" + Views.VIEW_GET_MORE_INFO);
@@ -692,17 +677,48 @@ public class SemanticSearch_portlet extends GenericPortlet {
 
                         // response.setRenderParameter("title_GS", appInput.title_GS);
                         response.setRenderParameter("title_GS", appInput.title_GS);
-                        info_GS = executeCommand(appInput.title_GS);
+//                        info_GS = executeCommand(appInput.title_GS);
+//
+//
+//                        response.setRenderParameter("info_GS", info_GS);
+//                        response.setRenderParameter("PortletStatus", "" + Views.VIEW_CITATIONS_GSCHOLAR);
 
+                        response.setRenderParameter("chek_altmetric", appInput.chek_altmetric);
 
-                        response.setRenderParameter("info_GS", info_GS);
-                        response.setRenderParameter("PortletStatus", "" + Views.VIEW_CITATIONS_GSCHOLAR);
+                        // System.out.println("appInput.chek_altmetric---->"+appInput.chek_altmetric);
+                        if (!appInput.chek_altmetric.equals("SI")) {
+                            info_GS = executeCommand(appInput.title_GS);
 
-
+                            response.setRenderParameter("info_GS", info_GS);
+                            response.setRenderParameter("PortletStatus", "" + Views.VIEW_CITATIONS_GSCHOLAR);
+                        } else {
+                            _log.info("Got action: 'ACTION_ALTMETRICS'");
+                            System.out.println("appInput.chek_altmetric---->" + appInput.url_altmetric);
+                            System.out.println("appInput.doi_altmetric---->" + appInput.doi_altmetric);
+                            response.setRenderParameter("url_altmetric", appInput.url_altmetric);
+                            response.setRenderParameter("doi_altmetric", appInput.doi_altmetric);
+                            response.setRenderParameter("PortletStatus", "" + Views.VIEW_ALTMETRICS);
+                        }
 
 
                         break;
 
+                    case ACTION_GET_ALTMETRICS:
+                         _log.info("Got action: 'ACTION_ALTMETRICS'");
+                    // Create the appInput object
+                    appInput = new App_Input();
+
+                    // Stores the user submitting the job
+                    appInput.username = username;
+
+                    // Process input fields and files to upload
+                    getInputForm(request, appInput);
+                    
+                    
+                    
+                    response.setRenderParameter("search_word", appInput.search_word);
+                    response.setRenderParameter("PortletStatus", "" + Views.VIEW_ALTMETRICS);
+                    break;    
                     case ACTION_SELECT_LANGUAGE:
                         _log.info("Got action: 'ACTION_SELECT_LANGUAGE'");
 
@@ -728,8 +744,8 @@ public class SemanticSearch_portlet extends GenericPortlet {
                         // Send the jobIdentifier and assign the correct view                    
                         response.setRenderParameter("PortletStatus", "" + Views.VIEW_SELECT_LANGUAGE);
                         break;
-                        
-                        case ACTION_GRAPH_RESOURCE:
+
+                    case ACTION_GRAPH_RESOURCE:
                         _log.info("Got action: 'ACTION_GRAPH_RESOURCE'");
 
                         // Get current preference values
@@ -744,7 +760,7 @@ public class SemanticSearch_portlet extends GenericPortlet {
                         // Process input fields and files to upload
                         getInputForm(request, appInput);
 
-                       
+
                         response.setRenderParameter("PortletStatus", "" + Views.VIEW_SELECT_LANGUAGE);
                         break;
                     default:
@@ -910,10 +926,6 @@ public class SemanticSearch_portlet extends GenericPortlet {
                 _log.info("VIEW_GET_MORE_INFO Selected ...");
                 String idResource = request.getParameter("idResource");
                 request.setAttribute("idResource", idResource);
-                
-                 String searched_word = request.getParameter("search_word");
-                request.setAttribute("search_word", searched_word);
-                
                 PortletRequestDispatcher dispatcher = getPortletContext().getRequestDispatcher("/viewDetailsResource.jsp");
                 dispatcher.include(request, response);
             }
@@ -947,6 +959,13 @@ public class SemanticSearch_portlet extends GenericPortlet {
 
 
                 PortletRequestDispatcher dispatcher = getPortletContext().getRequestDispatcher("/viewCitationsGS.jsp");
+                dispatcher.include(request, response);
+            }
+            break;
+                case VIEW_ALTMETRICS: {
+                _log.info("VIEW_ALTMETRICS Selected ...");
+                PortletRequestDispatcher dispatcher = 
+			getPortletContext().getRequestDispatcher("/viewAltmetrics.jsp");
                 dispatcher.include(request, response);
             }
             break;
@@ -995,7 +1014,6 @@ public class SemanticSearch_portlet extends GenericPortlet {
 //        PortletRequestDispatcher dispatcher = getPortletContext().getRequestDispatcher("/edit.jsp");
 //        dispatcher.include(request, response);
 //    } // doEdit
-
     //
     // doHelp
     //
@@ -1066,7 +1084,7 @@ public class SemanticSearch_portlet extends GenericPortlet {
                 diskFileItemFactory.setRepository(repositoryPath);
                 Iterator iter = items.iterator();
                 String logstring = "";
-                
+
                 while (iter.hasNext()) {
                     FileItem item = (FileItem) iter.next();
                     String fieldName = item.getFieldName();
@@ -1106,7 +1124,10 @@ public class SemanticSearch_portlet extends GenericPortlet {
             appInput.numberPage = (String) request.getParameter("numberOfPage");
             appInput.numRecordsForPage = (String) request.getParameter("numberOfRecords");
             appInput.title_GS = (String) request.getParameter("title_GS");
-            appInput.moreInfo = (String) request.getParameter("moreInfo");
+             appInput.chek_altmetric=(String) request.getParameter("chek_altmetric");
+            appInput.url_altmetric=(String) request.getParameter("url_altmetric");
+            appInput.doi_altmetric=(String) request.getParameter("doi_altmetric");
+
             if (appInput.selected_language == null) {
                 appInput.selected_language = (String) request.getParameter("nameLanguageDefault");
             }
@@ -1123,7 +1144,6 @@ public class SemanticSearch_portlet extends GenericPortlet {
                 + LS + "language selected: '" + appInput.selected_language + "'"
                 + LS + "number page selected: '" + appInput.numberPage + "'"
                 + LS + "number record for page: '" + appInput.numRecordsForPage + "'"
-                + LS + "moreInfo: '" + appInput.moreInfo + "'"
                 + LS);
     } // getInputForm 
 
@@ -1221,15 +1241,15 @@ public class SemanticSearch_portlet extends GenericPortlet {
 
             p.waitFor();
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            System.out.println("READER: " +reader); 
+            System.out.println("READER: " + reader);
             String line = "";
             condition:
             while ((line = reader.readLine()) != null) {
 
-                
-                System.out.println("ECCO: "+line.split(" ")[0]);
+
+                System.out.println("ECCO: " + line.split(" ")[0]);
                 control = true;
-                System.out.println("LINE: "+ line);
+                System.out.println("LINE: " + line);
 
 
                 if (line.contains("Title")) {
@@ -1248,8 +1268,8 @@ public class SemanticSearch_portlet extends GenericPortlet {
 //                        }
 //
 //                    }
-                    String tt1=new String(title.getBytes("ISO-8859-1"), "UTF-8");
-                     System.out.println("******TTTTTT UTF8: "+tt1);
+                    String tt1 = new String(title.getBytes("ISO-8859-1"), "UTF-8");
+                    System.out.println("******TTTTTT UTF8: " + tt1);
 
                     String newTitle_CHAIN = tt1.toUpperCase().replace(" ", "").replace("'", "").replace("?", "").replace(".", "");
                     System.out.println("Title_GS: " + newTitle_GS + "\nTITLE_CH: " + newTitle_CHAIN);
@@ -1263,8 +1283,8 @@ public class SemanticSearch_portlet extends GenericPortlet {
 
                     }
                 }
-                
-                 System.out.println("VALORE del control "+control);
+
+                System.out.println("VALORE del control " + control);
                 if (line.contains("URL")) {
                     url = line.split("URL ")[1];
                     System.out.println("URL: " + url);
@@ -1273,7 +1293,7 @@ public class SemanticSearch_portlet extends GenericPortlet {
 
                 if (line.contains("Versions") && !line.contains("Versions list")) {
                     versions = line.split("Versions ")[1];
-                     System.out.println("Versions: " + versions);
+                    System.out.println("Versions: " + versions);
                     info_GS[1] = versions;
                 }
 
@@ -1311,7 +1331,7 @@ public class SemanticSearch_portlet extends GenericPortlet {
             }
             if (!control) {
 
-                System.out.println("VALORE del control dentro !control"+control);
+                System.out.println("VALORE del control dentro !control" + control);
                 for (int i = 0; i < info_GS.length; i++) {
                     info_GS[i] = "No Information available for this resource";
                 }

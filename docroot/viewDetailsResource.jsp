@@ -6,6 +6,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="it.infn.ct.SemanticQueryMoreInfo"%>
 <%@page import="it.infn.ct.SemanticQuery"%>
+<%@page import="it.infn.ct.Altmetric"%>
 <jsp:useBean id="idResource" class="java.lang.String" scope="request"/>
 
 
@@ -37,14 +38,13 @@
 
         <div id="conteinerRecord" style="">
             <%
+            String url_lodlive="https://csgf.egi.eu/dariah-sse/LodLiveGraph/";//"http://127.0.0.1:8080/testlodlive/";//http://www.chain-project.eu/LodLiveGraph
+            
+            ArrayList arrayAltmetric = new ArrayList();
             
                 SemanticQueryMoreInfo moreInfo = new SemanticQueryMoreInfo();
                 //idResource = "http://openDocuments/resource/oai:eprints.bbk.ac.uk.oai2:244";
                // System.out.println("L'idresource e "+idResource);
-                
-                String searched_word = renderRequest.getParameter("searched_word");
-                System.out.println("SEARCHWORD MOREINFO "+searched_word);
-                
                 String[] infoElem = (String[]) moreInfo.getInfoResource(idResource);
                 String title = infoElem[1];
                 
@@ -59,6 +59,18 @@
                     String id = listIdentifier[k];
                     if (id.length()>4 && id.substring(0, 4).equals("http")) {
                         identifierURL = id;
+                    }
+                    String doi_resource = "";
+                    if (id.contains("doi")) {
+                        if (id.contains("info:")) {
+                            doi_resource = id.substring(9).toString();
+                        } else {
+                            doi_resource = id.substring(4).toString();
+                        }
+
+                        System.out.println("dentro details" + doi_resource);
+                        arrayAltmetric = Altmetric.QueryApi(doi_resource);
+
                     }
                 }
 
@@ -122,11 +134,11 @@
             <fieldset class="fieldsetInformations" >
                 <legend class="legendFieldset" >General Information</legend>
                 <p class="klios_p"><b>Authors: </b><%=authors%></p>
-                <%
-                 //ALTERNATIVE TITLE
-               if(alternativeTitle.size()!=0){
+               <%
+                //ALTERNATIVE TITLE
+              if(alternativeTitle.size()!=0){
                     
-                     for (int j = 0; j < alternativeTitle.size(); j++) {
+                    for (int j = 0; j < alternativeTitle.size(); j++) {
                        
                 %><p class="klios_p"><b>Alternative Title : </b><%=alternativeTitle.get(j).toString()%></p>  
                 <%
@@ -272,56 +284,16 @@
                 %>
 
             </fieldset>
-
-            <br>
-            <a id="LinkedData" class="Link" href="http://www.chain-project.eu/LodLiveGraph/?<%=idResource%>" target="_blank">Linked Data </a>
+          
+              <br>
+              <a id="LinkedData" class="Link" href="<%=url_lodlive%>?<%=idResource%>" target="_blank">Linked Data </a>
 
             <br><br>
-
-
-            <a id="GScholarLink" class="Link" href="#" onClick="showFieldSetGScholar(); return false;">Information from Google Scholar <img id="ImageAnimationGScholar" class="ImageAnimation" src="<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" /></a>
-            <br>
-            <fieldset class="fieldsetInformations" id="IdFieldSetGScholar" style="display: none;">
-                <%
-                    if(info_GS[0].equals(" ") || info_GS[0].equals("No Information available") || info_GS[0].equals("None") || info_GS[0].equals("No Available Service"))
-                    {%>
-                <p><b>Resource location: </b><%=info_GS[0]%></p>
-                <%}
-                   else{%>
-                <p><b>Resource location: </b><a href="<%=info_GS[0]%>" target="_blank"><%=info_GS[0]%></a></p>
-                <%}%>
-
-                <p><b>No. of versions: </b><%=info_GS[1]%></p>
-                <%
-                if(info_GS[2].equals(" ") || info_GS[2].equals("No Information available") || info_GS[2].equals("None") || info_GS[2].equals("No Available Service"))
-                    {%>
-                <p><b>List of versions: </b><%=info_GS[2]%></p>
-                <%}
-                   else{%>
-                <p><b>List of versions: </b><a href="<%=info_GS[2]%>" target="_blank"><%=info_GS[2]%></a></p>
-                <%}%>
-
-                <p><b>No. of citations: </b><%=info_GS[3]%></p>
-
-                <%
-               if(info_GS[4].equals(" ") || info_GS[4].equals("No Information available") || info_GS[4].equals("None") || info_GS[4].equals("No Available Service"))
-                   {%>
-                <p><b>List of citations: </b><%=info_GS[4]%></p>
-                <%}
-                   else{%>
-                <p><b>List of citations: </b><a href="<%=info_GS[4]%>" target="_blank"><%=info_GS[4]%></a></p>
-                <%}%>              
-                <p><b>Year: </b><%=info_GS[5]%></p>
-            </fieldset> 
-
-
-
-            <br>
-
-
+            
+           
             <a id="DateLink" class="Link" href="#" onClick="showFieldSetDate(); return false;">Date Information <img id="ImageAnimationDate" class="ImageAnimation" src="<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" /></a>
-
-
+            
+            
             <br>
             <fieldset class="fieldsetInformations" id="IdFieldSetDate" style="display: none;">
                 <p class="klios_p"><b>DateStamp: </b><%=datestamp%></p>
@@ -335,13 +307,13 @@
                 <%} 
                         }
                                        }
-                %>      
+                  %>      
             </fieldset>  
             <br>
             <a id="DataSetLink" class="Link" href="#" onClick="showFieldSetDataSet(); return false;">Dataset Information <img id="ImageAnimationDataSet" class="ImageAnimation" src="<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" /></a>
             <br>
             <fieldset class="fieldsetInformations" id="IdFieldSetDataSet" style="display: none;">
-
+                
                 <%String[] dataSet = (String[]) moreInfo.getDataSetFromResource(idResource);
                     String identifierDataSet = dataSet[1];
                     
@@ -442,11 +414,11 @@
                 %>
             </fieldset>  
             <br>
-
+           
             <a id="RepositoryLink" class="Link" href="#" onClick="showFieldSetRepository(); return false;">Repository Information <img id="ImageAnimationRepository" class="ImageAnimation" src="<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" /></a>
             <br>
             <fieldset class="fieldsetInformations" id="IdFieldSetRepository" style="display: none;">
-
+                
                 <%
                    ArrayList arrayRepository=SemanticQueryMoreInfo.getRepository(idResource);
                  //  System.out.println("repository size "+arrayRepository.size());
@@ -479,7 +451,7 @@
 
                         //System.out.println("URL REP "+urlRep);
 
-                %>
+               %>
                 <p class="klios_p"><b>Name: </b> <%=nameRep%> <%=acronimRep%>  </p> 
                 <p class="klios_p"><b>URL : </b> <a href="<%= urlRep %>" target="_blank" title="<%= urlRep%>"><u> <%= urlRep %></u> </a></p>
                 <p class="klios_p"><b>OAI-PMH : </b><a href="<%=addressOAIPMHRep%>" target="_blank"><u><%=addressOAIPMHRep%></u></a></p>
@@ -490,39 +462,151 @@
                 <p class="klios_p"><b>Domain : </b><%=domainRep%></p>
                 <p class="klios_p"><b>Project : </b><%=projectRep%></p>
                 <p class="klios_p"><b>Organization : </b><%=organization%></p>
+               
+              
+
+               <%
+               // }
+                }
+            %>
+            </fieldset>
+            <br>
+           <a id="GScholarLink" class="Link" href="#" onClick="showFieldSetGScholar(); return false;">Information from Google Scholar <img id="ImageAnimationGScholar" class="ImageAnimation" src="<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" /></a>
+            <br>
+            <fieldset class="fieldsetInformations" id="IdFieldSetGScholar" style="display: none;">
+                <%
+                    if(info_GS[0].equals(" ") || info_GS[0].equals("No Information available") || info_GS[0].equals("None") || info_GS[0].equals("No Available Service"))
+                    {%>
+                         <p><b>Resource location: </b><%=info_GS[0]%></p>
+                    <%}
+                   else{%>
+                     <p><b>Resource location: </b><a href="<%=info_GS[0]%>" target="_blank"><%=info_GS[0]%></a></p>
+                   <%}%>
+               
+                <p><b>No. of versions: </b><%=info_GS[1]%></p>
+                <%
+                if(info_GS[2].equals(" ") || info_GS[2].equals("No Information available") || info_GS[2].equals("None") || info_GS[2].equals("No Available Service"))
+                    {%>
+                         <p><b>List of versions: </b><%=info_GS[2]%></p>
+                    <%}
+                   else{%>
+                      <p><b>List of versions: </b><a href="<%=info_GS[2]%>" target="_blank"><%=info_GS[2]%></a></p>
+                   <%}%>
+               
+                <p><b>No. of citations: </b><%=info_GS[3]%></p>
+                
+                 <%
+                if(info_GS[4].equals(" ") || info_GS[4].equals("No Information available") || info_GS[4].equals("None") || info_GS[4].equals("No Available Service"))
+                    {%>
+                          <p><b>List of citations: </b><%=info_GS[4]%></p>
+                    <%}
+                   else{%>
+                      <p><b>List of citations: </b><a href="<%=info_GS[4]%>" target="_blank"><%=info_GS[4]%></a></p>
+                   <%}%>              
+                <p><b>Year: </b><%=info_GS[5]%></p>
+        </fieldset> 
+            
+           
+        
+             <br>
+            <a id="AltmetricLink" class="Link" href="#" onClick="showFieldSetAltmetric(); return false;">Altmetrics<img id="ImageAnimationAltmetric" class="ImageAnimation" src="<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" /></a>
+            <br>
+            <fieldset class="fieldsetInformations" id="IdFieldSetAltmetric" style="display: none;">
+                <%
+
+
+
+
+                    //  System.out.println("repository size "+arrayRepository.size());
+                    if (arrayAltmetric.size() > 0) {
+
+                        // for(int i=0; i<arrayAlmetric.size(); i++){
+
+                        String title_altmetric = arrayAltmetric.get(0).toString();
+                        String doi_altmetric = arrayAltmetric.get(1).toString();
+                        String issns_altmetric = arrayAltmetric.get(2).toString();
+                        String journal_altmetric = arrayAltmetric.get(3).toString();
+                        String cohorts_pub_altmetric = arrayAltmetric.get(4).toString();
+                        String type_altmetric = arrayAltmetric.get(5).toString();
+                        String id_altmetric = arrayAltmetric.get(6).toString();
+                        String schema_altmetric = arrayAltmetric.get(7).toString();
+                        String cited_by_posts_count_altmetric = arrayAltmetric.get(8).toString();
+                        String cited_by_tweeters_count_altmetric = arrayAltmetric.get(9).toString();
+                        String cited_by_accounts_count_altmetric = arrayAltmetric.get(10).toString();
+                        String last_updated_altmetric = arrayAltmetric.get(11).toString();
+                        String score_altmetric = arrayAltmetric.get(12).toString();
+                        String history_altmetric = arrayAltmetric.get(13).toString();
+                        String url_altmetric = arrayAltmetric.get(14).toString();
+
+
+                        String added_on_altmetric = arrayAltmetric.get(15).toString();
+
+                        String published_on_altmetric = arrayAltmetric.get(16).toString();
+
+                        String readers_altmetric = arrayAltmetric.get(17).toString();
+
+
+                        String readers_count_altmetric = arrayAltmetric.get(18).toString();
+
+
+
+                        String images_altmetric = arrayAltmetric.get(19).toString();
+
+                        String details_url_altmetric = arrayAltmetric.get(20).toString();
+                        System.out.println("URLLLLLL" + details_url_altmetric);
+
+
+
+
+
+                        //System.out.println("URL REP "+urlRep);
+
+                %>
+                <p class="klios_p"><b>Title: </b> <%=title_altmetric%></p> 
+                <p class="klios_p"><b>DOI: </b> <%=doi_altmetric%></p>
+                <p class="klios_p"><b>ISSNS: </b> <%=issns_altmetric%></p>
+                <p class="klios_p"><b>JOURNAL: </b> <%=journal_altmetric%></p>
+                <p class="klios_p"><b>COHORTS PUB: </b> <%=cohorts_pub_altmetric%></p>
+                <p class="klios_p"><b>TYPE: </b> <%=type_altmetric%></p>
+                <p class="klios_p"><b>ID: </b> <%=id_altmetric%></p>
+                <p class="klios_p"><b>SCHEMA: </b> <%=schema_altmetric%></p>
+                <p class="klios_p"><b>CITED BY POSTS COUNT: </b> <%=cited_by_posts_count_altmetric%></p>
+                <p class="klios_p"><b>CITED BY TWEETERS COUNT: </b> <%=cited_by_tweeters_count_altmetric%></p>
+                <p class="klios_p"><b>CITED BY ACCOUNTS COUNT: </b> <%=cited_by_accounts_count_altmetric%></p>
+                <p class="klios_p"><b>LAST UPDATED: </b> <%=last_updated_altmetric%></p>
+                <p class="klios_p"><b>SCORE: </b> <%=score_altmetric%></p>
+                <p class="klios_p"><b>HISTORY: </b> <%=history_altmetric%></p>
+                <p class="klios_p"><b>URL: </b><a href="<%=url_altmetric%>" target="_blank"> <%=url_altmetric%></a></p>
+                <p class="klios_p"><b>ADDED ON: </b> <%=added_on_altmetric%></p>
+                <p class="klios_p"><b>PUBLISHED ON: </b> <%=published_on_altmetric%></p>
+                <p class="klios_p"><b>READERS: </b> <%=readers_altmetric%></p>
+                <p class="klios_p"><b>READERS COUNT: </b> <%=readers_count_altmetric%></p>
+                <p class="klios_p"><b>IMAGES: </b><img src="<%=images_altmetric%>"> </p>
+                <p class="klios_p"><b>DETAILS URL: </b> <a href="<%=details_url_altmetric%>"  target="_blank"><%=details_url_altmetric%></a></p>
 
 
 
                 <%
-                // }
-                 }
+                        // }
+                    }
                 %>
             </fieldset>
-            <br>
 
-
-
-
-
+            
+            
             <br><br>   
         </div>
         <div>
-             <form id="search_form" action="<portlet:actionURL portletMode="view"><portlet:param name="PortletStatus" value="ACTION_SEMANTIC_SEARCH_ALL_LANGUAGE"/></portlet:actionURL>" method="post">   
-            
-            
-             <!-- <input type="button" value="<< Back" onclick="history.go( -1 );"/> -->
-              <input type="submit" value="<< Back" />
-             <input  hidden="true" name="moreInfo" id="idMoreInfo" value="OK" />
-             <input hidden="true"  id="id_search_word"  name="search_word" value="<%=searched_word%>" />
-             </form>
+            <input type="button" value="<< Back" onclick="history.go( -1 );"/>
         </div>
-
+        
         <script type="text/javascript">
             
             var controlDataSet=true;
             var controlRepository=true;
             var controlGScholar=true;
             var controlDate=true;
+             var controlAltmetric=true;
             
             function showFieldSetDataSet(){
                 $("#IdFieldSetDataSet").animate({"height": "toggle"});
@@ -533,11 +617,11 @@
                 if( controlDataSet==true ) {
                     $("#ImageAnimationDataSet").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_214_resize_small.png" );
                     
-                    controlDataSet=false;
+                   controlDataSet=false;
                 }
                 else {
                     $("#ImageAnimationDataSet").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" );
-                    controlDataSet=true;
+                     controlDataSet=true;
                 }
                 
             }
@@ -551,11 +635,11 @@
                 if( controlRepository==true ) {
                     $("#ImageAnimationRepository").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_214_resize_small.png" );
                     
-                    controlRepository=false;
+                   controlRepository=false;
                 }
                 else {
                     $("#ImageAnimationRepository").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" );
-                    controlRepository=true;
+                     controlRepository=true;
                 }
                 
             }
@@ -568,16 +652,16 @@
                 if( controlGScholar==true ) {
                     $("#ImageAnimationGScholar").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_214_resize_small.png" );
                     
-                    controlGScholar=false;
+                   controlGScholar=false;
                 }
                 else {
                     $("#ImageAnimationGScholar").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" );
-                    controlGScholar=true;
+                     controlGScholar=true;
                 }
                 
             }
             
-            function showFieldSetDate(){
+          function showFieldSetDate(){
                 $("#IdFieldSetDate").animate({"height": "toggle"});
                 
                 
@@ -586,11 +670,29 @@
                 if( controlDate==true ) {
                     $("#ImageAnimationDate").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_214_resize_small.png" );
                     
-                    controlDate=false;
+                   controlDate=false;
                 }
                 else {
                     $("#ImageAnimationDate").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" );
-                    controlDate=true;
+                     controlDate=true;
+                }
+                
+            }  
+            
+             function showFieldSetAltmetric(){
+                $("#IdFieldSetAltmetric").animate({"height": "toggle"});
+                
+                
+                
+                
+                if( controlAltmetric==true ) {
+                    $("#ImageAnimationAltmetric").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_214_resize_small.png" );
+                    
+                    controlAltmetric=false;
+                }
+                else {
+                    $("#ImageAnimationAltmetric").attr("src","<%=renderRequest.getContextPath()%>/images/glyphicons_215_resize_full.png" );
+                    controlAltmetric=true;
                 }
                 
             }  
@@ -601,8 +703,8 @@
             
             
         </script>          
-
-
+        
+        
     </body>
 
 </html>
